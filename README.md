@@ -1,8 +1,19 @@
 # Actions Runner Controller (ARC)
 
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6061/badge)](https://bestpractices.coreinfrastructure.org/projects/6061)
-[![awesome-runners](https://img.shields.io/badge/listed%20on-awesome--runners-blue.svg)](https://github.com/jonico/awesome-runners)
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/actions-runner-controller)](https://artifacthub.io/packages/search?repo=actions-runner-controller)
+## ARC on OCP Fork Documentation
+
+Original ARC Readme after this section.
+
+
+### Goals
+* Run ARC on Openshift
+* Be able to build container images in Actions workflows run by ARC runners
+    * [Kaniko](https://github.com/GoogleContainerTools/kaniko) will be used since it does not require root privilege on the cluster nodes
+
+### What has been done in this fork
+* Created a [Dockerfile for the ARC runners on OCP](./runner/actions-runner-openshift.ubuntu-22.04.dockerfile)
+    * the image is based on [the default runner image](./runner/actions-runner.ubuntu-22.04.dockerfile) and includes all the kaniko tooling
+    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
 
 ## About
 
