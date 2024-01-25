@@ -1,0 +1,24 @@
+name: 'Kaniko login to private container registry'
+description: 'Prepare config.json file for Kaniko to authenticate to private container registry.'
+
+inputs:
+  registry:
+    description: 'Server address of container registry. If not set then will default to Docker Hub'
+    required: false
+    default: registry-1.docker.io
+  username:
+    description: 'Username used to log against the container registry'
+    required: true
+  password:
+    description: 'Password or personal access token used to log against the container registry'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create config.json to auth to container registry
+      shell: bash
+      run: |
+        # Write config file, change to your destination registry
+        AUTH=$(echo -n ${{ inputs.username }}:${{ inputs.password }} | base64)
+        echo "{\"auths\": {\"${{ inputs.registry }}\": {\"auth\": \"${AUTH}\"}}}" > /kaniko/.docker/config.json

@@ -1,0 +1,26 @@
+name: 'Kaniko build and push image to container registry'
+description: 'Build and push image to container registry (use kaniko-login to auth to registry).'
+
+inputs:
+  dockerfile:
+    description: 'Path to the Dockerfile'
+    required: true
+  tag:
+    description: 'Tag of the built image'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create config.json to auth to container registry
+      shell: bash
+      run: |
+        # Configure git
+        export GIT_USERNAME="kaniko-bot"
+        export GIT_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
+
+        # Build and push (sub in your image, of course)
+        /kaniko/executor --dockerfile="${{ inputs.dockerfile }}" \
+          --context="${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
+          --destination="${{ inputs.tag }}" \
+          --push-retry 5
