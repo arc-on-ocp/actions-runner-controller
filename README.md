@@ -26,8 +26,9 @@
 	   * one [values file for the root-enabled image](./charts/gha-runner-scale-set/values-openshift.yaml);
 	   * one [values file for the rootless image](./charts/gha-runner-scale-set/values-openshift-rootless.yaml);
  * Created [a custom SCC `uid1001`](./uid1001.yaml) to allow the runner pods to run with the `runner` user in a secure way (without root access); 
- * Created [`kaniko-*` actions](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
- * Created [a sample workflow](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
+ * Created [a test repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/) with:
+   *  [`kaniko-*` actions](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
+   * [a sample workflow](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
 
 ### TODO
 
