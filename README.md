@@ -1,19 +1,32 @@
+
 # Actions Runner Controller (ARC)
 
 ## ARC on OCP Fork Documentation
 
-Original ARC Readme after this section.
-
 
 ### Goals
-* Run ARC on Openshift
+* Run ARC on Openshift without defeating the Openshift security
 * Be able to build container images in Actions workflows run by ARC runners
     * [Kaniko](https://github.com/GoogleContainerTools/kaniko) will be used since it does not require root privilege on the cluster nodes
 
-### What has been done in this fork
-* Created a [Dockerfile for the ARC runners on OCP](./runner/actions-runner-openshift.ubuntu-22.04.dockerfile)
-    * the image is based on [the default runner image](./runner/actions-runner.ubuntu-22.04.dockerfile) and includes all the kaniko tooling
+### What has been done so far
+* Created a [Dockerfile for the ARC runners on OCP](./runner/actions-runner-openshift.ubuntu-22.04.dockerfile);
+    * the image is based on [the default runner image](./runner/actions-runner.ubuntu-22.04.dockerfile) and includes all the kaniko tooling;
     * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
+ * Created a Helm values file for the runner set on Openshift
+	 * the only difference is actually the image used by the runner
+ * Created [`kaniko-*` actions](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
+ * Created [a sample workflow](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
+
+
+ > :warning: Since this repository is a fork in an enterprise where self-hosted runners are disabled, both the kaniko actions and the sample workflow are actually in [this internal repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow) during the testing phase.
+
+### TODO
+
+* Try to not use the `anyuid` SCC for the runner sets as it allows the runner pod to use `sudo` (in Openshift a good practice is to never allow pod to run as root or use `sudo`)
+* Update the runner set Helm chart to automate the SCC creation / binding
+* ???
+
 
 ## About
 
