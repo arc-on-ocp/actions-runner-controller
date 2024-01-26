@@ -29,9 +29,6 @@
  * Created [`kaniko-*` actions](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
  * Created [a sample workflow](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
 
-
- > :warning: Since this repository is a fork in an enterprise where self-hosted runners are disabled, both the kaniko actions and the sample workflow are actually in [this internal repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow) during the testing phase.
-
 ### TODO
 
 * Update the runner set Helm chart to automate the SCC creation / binding
