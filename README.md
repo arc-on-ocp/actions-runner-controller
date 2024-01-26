@@ -27,6 +27,66 @@
 * Update the runner set Helm chart to automate the SCC creation / binding
 * ???
 
+## How-to
+
+### Create a local Openshift Cluster using CRC
+1. Download CRC from [Red Hat website](https://developers.redhat.com/products/openshift-local/overview)
+2. `crc setup`
+	* you'll need the pull secret that you can retrieve from the Red Hat portal
+3. `crc start`
+4. Once the cluster has started, run `crc console --credentials` to retrieve the command line to authenticate as cluster admin
+5. `oc login -u kubeadmin -p hR5Dp.....dYIrS-zDu6V https://api.crc.testing:6443` 
+
+#### Install the ARC controller
+There is nothing to modify compared to the default [ARC controller install on K8S](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/quickstart-for-actions-runner-controller#installing-actions-runner-controller):
+
+```
+NAMESPACE="arc-systems"
+helm install arc \
+    --namespace "${NAMESPACE}" \
+    --create-namespace \
+    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
+```
+
+#### Prepare the runner auth secret using the GitHub app info
+
+We use the [GitHub app auth method](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/authenticating-to-the-github-api#authenticating-arc-with-a-github-app) to authenticate ARC runners to GitHub.
+
+```
+$ APP_ID=793817
+$ INSTALL_ID=46003824
+$ GPG_KEY=./gpg.key # the gpg key file is retrieved from GitHub.com and stored locally
+
+$ oc new-project arc-runners
+$ oc create secret generic pre-defined-secret \
+   --namespace=arc-runners \
+   --from-literal=github_app_id=$APP_ID \
+   --from-literal=github_app_installation_id=$INSTALL_ID \
+   --from-file=github_app_private_key=$GPG_KEY
+```
+
+#### Deploy the ARC runner set for OCP
+
+```bash
+INSTALLATION_NAME="arc-runner-set-ocp"
+NAMESPACE="arc-runners"
+helm upgrade --install "${INSTALLATION_NAME}" \
+    --namespace "${NAMESPACE}" \
+    --values ./charts/gha-runner-scale-set/values-openshift.yaml \
+    --set githubConfigUrl="https://github.com/ghsioux-octodemo" \
+    --set githubConfigSecret="pre-defined-secret" \
+    --set minRunners=1 \
+    ./charts/gha-runner-scale-set
+
+# Allow the runners to use sudo and anyuid
+# By default, the runner process runs with UID 1001 but it can do sudo for certain tasks 
+$ oc adm policy add-scc-to-user anyuid -z arc-runner-set-ocp-gha-rs-no-permission -n arc-runners
+```
+
+#### Test the setup
+Go to [the Actions tab of the test repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/actions/workflows/arc-runner-set-ocp-test-with-actions.yml) (where the kaniko actions and test workflow resides) and trigger manually the test workflow. 
+
+## Below is the original [actions-runner-controller repo](https://github.com/actions/actions-runner-controller/) README
 
 ## About
 
