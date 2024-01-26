@@ -77,6 +77,7 @@ $ oc create secret generic pre-defined-secret \
 
 ```bash
 $ cd actions-runner-controller/
+
 $ INSTALLATION_NAME="arc-runner-set-ocp"
 NAMESPACE="arc-runners"
 helm upgrade --install "${INSTALLATION_NAME}" \
@@ -95,6 +96,7 @@ $ oc adm policy add-scc-to-user anyuid -z arc-runner-set-ocp-gha-rs-no-permissio
 #### Deploy the ARC runner set for OCP (rootless version)
 ```bash
 $ cd actions-runner-controller/
+
 $ INSTALLATION_NAME="arc-runner-set-ocp"
 NAMESPACE="arc-runners"
 helm upgrade --install "${INSTALLATION_NAME}" \
