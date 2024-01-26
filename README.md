@@ -12,7 +12,7 @@
 ### What has been done so far
 * Created **two** Dockerfile for the ARC runners on OCP;
 	 * one with root access through `sudo` ([Dockerfile](./runner/actions-runner-openshift.ubuntu-22.04.dockerfile)):
-	    * the image is based on [the default runner image](ghcr.io/actions/actions-runner:latest) and includes all the kaniko tooling;
+	    * the image is based on [the default runner image](https://ghcr.io/actions/actions-runner:latest) and includes all the kaniko tooling;
 	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
 	    * **pros:** developpers will be able to run `sudo` commands (e.g. `sudo apt install`) directly in their Actions workflows if needed;
 	     * **cons:** will require [`anyuid` SCC](https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html) (see How to below) which is not a good practice in an Openshift environment (defeats the Openshift security);
