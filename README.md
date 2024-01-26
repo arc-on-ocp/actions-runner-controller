@@ -25,6 +25,7 @@
 
 * Try to not use the `anyuid` SCC for the runner sets as it allows the runner pod to use `sudo` (in Openshift a good practice is to never allow pod to run as root or use `sudo`)
 * Update the runner set Helm chart to automate the SCC creation / binding
+* Don't use the ARC runner default image as base image since it embeds unused tool (typically Docker)
 * ???
 
 ## How-to
