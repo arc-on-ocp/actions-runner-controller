@@ -18,7 +18,7 @@
 	 * one fully rootless ([Dockerfile](./runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile)):
 	    * the image is based on [the official doc to build custom ARC runner image](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/about-actions-runner-controller#creating-your-own-runner-image) and includes all the kaniko tooling;
 	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp-rootless)	    
-	    * **pros:** will fully support [arbitrary user ids from Openshift](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#use-uid_create-images) (best security practice);
+	    * **pros:** fully supports [arbitrary user ids from Openshift](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#use-uid_create-images) (best security practice);
 	     * **cons:** the packages required to run the workflows must be installed in [the Dockerfile](https://github.com/ghsioux-octodemo/actions-runner-controller/blob/master/runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile#L18);
  * Created 2 Helm values file for the runner set on Openshift
 	 * the only difference is actually the image used by the runner
