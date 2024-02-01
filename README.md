@@ -1,4 +1,3 @@
-
 # Actions Runner Controller (ARC)
 
 ## ARC on OCP Fork Documentation
@@ -19,20 +18,18 @@
 	 * one fully rootless ([Dockerfile](./runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile)):
 	    * the image is based on [the official doc to build custom ARC runner image](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/about-actions-runner-controller#creating-your-own-runner-image) and includes all the kaniko tooling;
 	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp-rootless)	    
-	    * **pros:** will require a custom, least-privileged SCC (see How to below) which is a good practice in an Openshift environment (no root or privilege needed);
+	    * **pros:** will fully support [arbitrary user ids from Openshift](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#use-uid_create-images) (best security practice);
 	     * **cons:** the packages required to run the workflows must be installed in [the Dockerfile](https://github.com/ghsioux-octodemo/actions-runner-controller/blob/master/runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile#L18);
  * Created 2 Helm values file for the runner set on Openshift
 	 * the only difference is actually the image used by the runner
 	   * one [values file for the root-enabled image](./charts/gha-runner-scale-set/values-openshift.yaml);
 	   * one [values file for the rootless image](./charts/gha-runner-scale-set/values-openshift-rootless.yaml);
- * Created [a custom SCC `uid1001`](./uid1001.yaml) to allow the runner pods to run with the `runner` user in a secure way (without root access); 
  * Created [a test repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/) with:
    *  [`kaniko-*` actions](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
    * [a sample workflow](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
 
 ### TODO
 
-* Update the runner set Helm chart to automate the SCC creation / binding
 * Improve the `kaniko-build-push` action to handle more cases
 
 ## How-to
@@ -106,12 +103,6 @@ helm upgrade --install "${INSTALLATION_NAME}" \
     --set githubConfigSecret="pre-defined-secret" \
     --set minRunners=1 \
     ./charts/gha-runner-scale-set
-
-# Create the custom SCC
-$ oc apply -f uid1001.yaml
-
-# By default, the runner process runs with UID 1001 but it can do sudo for certain tasks 
-$ oc adm policy add-scc-to-user uid1001 -z arc-runner-set-ocp-gha-rs-no-permission -n arc-runners
 ```
 
 #### Test the setup
@@ -177,3 +168,4 @@ We welcome contributions from the community. For more details on contributing to
 ## Troubleshooting
 
 We are very happy to help you with any issues you have. Please refer to the "[Troubleshooting](https://github.com/actions/actions-runner-controller/blob/master/TROUBLESHOOTING.md)" section for common issues.
+

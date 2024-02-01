@@ -1,6 +1,8 @@
 FROM --platform=linux/amd64  gcr.io/kaniko-project/executor AS kaniko
 FROM --platform=linux/amd64  mcr.microsoft.com/dotnet/runtime-deps:6.0 as build
 
+# From GitHub ARC custom image doc: https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/about-actions-runner-controller#creating-your-own-runner-image
+
 # Replace value with the latest runner release version
 # source: https://github.com/actions/runner/releases
 # ex: 2.303.0
@@ -17,7 +19,7 @@ ENV ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1
 
 RUN apt update -y && apt install curl unzip git -y
 
-RUN adduser --disabled-password --gecos "" --uid 1001 runner
+RUN adduser --disabled-password --gecos "" runner
 
 WORKDIR /home/runner
 
@@ -37,4 +39,15 @@ RUN chown -R runner:runner /kaniko
 ENV PATH $PATH:/usr/local/bin:/kaniko
 ENV DOCKER_CONFIG /kaniko/.docker/
 
+# Support arbitrary UIDs in Openshift 
+# https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#use-uid_create-images
+RUN chgrp -R 0 /home/runner && \
+    chmod -R g=u /home/runner && \
+    chgrp -R 0 /kaniko && \
+    chmod -R g=u /kaniko
+
 USER runner
+
+# Important otherwise ~/ will resolve to /, hence breaking actions that try
+# to use the home directory (e.g. setup-java wants to create ~/.m2 dir)
+ENV HOME=/home/runner
