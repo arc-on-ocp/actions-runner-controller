@@ -12,21 +12,21 @@
 * Created **two** Dockerfile for the ARC runners on OCP;
 	 * one with root access through `sudo` ([Dockerfile](./runner/actions-runner-openshift.ubuntu-22.04.dockerfile)):
 	    * the image is based on [the default runner image](https://ghcr.io/actions/actions-runner:latest) and includes all the kaniko tooling;
-	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
+	    * image is [publicly available](https://github.com/orgs/arc-on-ocp/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
 	    * **pros:** developpers will be able to run `sudo` commands (e.g. `sudo apt install`) directly in their Actions workflows if needed;
 	     * **cons:** will require [`anyuid` SCC](https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html) (see How to below) which is not a good practice in an Openshift environment (defeats the Openshift security);
 	 * one fully rootless ([Dockerfile](./runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile)):
 	    * the image is based on [the official doc to build custom ARC runner image](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/about-actions-runner-controller#creating-your-own-runner-image) and includes all the kaniko tooling;
-	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp-rootless)	    
+	    * image is [publicly available](https://github.com/orgs/arc-on-ocp/packages/container/package/actions-runner-controller%2Farc-runner-ocp-rootless)	    
 	    * **pros:** fully supports [arbitrary user ids from Openshift](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#use-uid_create-images) (best security practice);
-	     * **cons:** the packages required to run the workflows must be installed in [the Dockerfile](https://github.com/ghsioux-octodemo/actions-runner-controller/blob/master/runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile#L18);
+	     * **cons:** the packages required to run the workflows must be installed in [the Dockerfile](https://github.com/arc-on-ocp/actions-runner-controller/blob/master/runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile#L18);
  * Created 2 Helm values file for the runner set on Openshift
 	 * the only difference is actually the image used by the runner
 	   * one [values file for the root-enabled image](./charts/gha-runner-scale-set/values-openshift.yaml);
 	   * one [values file for the rootless image](./charts/gha-runner-scale-set/values-openshift-rootless.yaml);
- * Created [a test repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/) with:
-   *  [`kaniko-*` actions](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
-   * [a sample workflow](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
+ * Created [a test repository](https://github.com/arc-on-ocp/arc-on-openshift-test-actions-workflow/) with:
+   *  [`kaniko-*` actions](https://github.com/arc-on-ocp/arc-on-openshift-test-actions-workflow/tree/main/.github/actions) for login to private registry and build/push image;
+   * [a sample workflow](https://github.com/arc-on-ocp/arc-on-openshift-test-actions-workflow/blob/main/.github/workflows/arc-runner-set-ocp-test-with-actions.yml) to test the whole setup by building a simple container image and pushing it to GHCR.
 
 ### TODO
 
@@ -80,7 +80,7 @@ NAMESPACE="arc-runners"
 helm upgrade --install "${INSTALLATION_NAME}" \
     --namespace "${NAMESPACE}" \
     --values ./charts/gha-runner-scale-set/values-openshift.yaml \
-    --set githubConfigUrl="https://github.com/ghsioux-octodemo" \
+    --set githubConfigUrl="https://github.com/arc-on-ocp" \
     --set githubConfigSecret="pre-defined-secret" \
     --set minRunners=1 \
     ./charts/gha-runner-scale-set
@@ -99,14 +99,14 @@ NAMESPACE="arc-runners"
 helm upgrade --install "${INSTALLATION_NAME}" \
     --namespace "${NAMESPACE}" \
     --values ./charts/gha-runner-scale-set/values-openshift-rootless.yaml \
-    --set githubConfigUrl="https://github.com/ghsioux-octodemo" \
+    --set githubConfigUrl="https://github.com/arc-on-ocp" \
     --set githubConfigSecret="pre-defined-secret" \
     --set minRunners=1 \
     ./charts/gha-runner-scale-set
 ```
 
 #### Test the setup
-Go to [the Actions tab of the test repository](https://github.com/ghsioux-octodemo/arc-on-openshift-test-actions-workflow/actions/workflows/arc-runner-set-ocp-test-with-actions.yml) (where the kaniko actions and test workflow resides) and trigger manually the test workflow. 
+Go to [the Actions tab of the test repository](https://github.com/arc-on-ocp/arc-on-openshift-test-actions-workflow/actions/workflows/arc-runner-set-ocp-test-with-actions.yml) (where the kaniko actions and test workflow resides) and trigger manually the test workflow. 
 
 ## Below is the original [actions-runner-controller repo](https://github.com/actions/actions-runner-controller/) README
 
