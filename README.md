@@ -59,8 +59,8 @@ We use the [GitHub app auth method](https://docs.github.com/en/enterprise-cloud@
 
 ```
 # Once you installed your own app on the org with the above doc:
-$ APP_ID=793817
-$ INSTALL_ID=46003824
+$ APP_ID=813936
+$ INSTALL_ID=46842723
 $ GPG_KEY=./gpg.key # the gpg key file is retrieved from GitHub.com and stored locally
 
 $ oc new-project arc-runners
