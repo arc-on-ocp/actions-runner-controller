@@ -12,12 +12,12 @@
 * Created **two** Dockerfile for the ARC runners on OCP;
 	 * one with root access through `sudo` ([Dockerfile](./runner/actions-runner-openshift.ubuntu-22.04.dockerfile)):
 	    * the image is based on [the default runner image](https://ghcr.io/actions/actions-runner:latest) and includes all the kaniko tooling;
-	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
+	    * image is [publicly available](https://github.com/orgs/arc-on-ocp/packages/container/package/actions-runner-controller%2Farc-runner-ocp)
 	    * **pros:** developpers will be able to run `sudo` commands (e.g. `sudo apt install`) directly in their Actions workflows if needed;
 	     * **cons:** will require [`anyuid` SCC](https://docs.openshift.com/container-platform/4.14/authentication/managing-security-context-constraints.html) (see How to below) which is not a good practice in an Openshift environment (defeats the Openshift security);
 	 * one fully rootless ([Dockerfile](./runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile)):
 	    * the image is based on [the official doc to build custom ARC runner image](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/about-actions-runner-controller#creating-your-own-runner-image) and includes all the kaniko tooling;
-	    * image is [publicly available](https://github.com/orgs/ghsioux-octodemo/packages/container/package/actions-runner-controller%2Farc-runner-ocp-rootless)	    
+	    * image is [publicly available](https://github.com/orgs/arc-on-ocp/packages/container/package/actions-runner-controller%2Farc-runner-ocp-rootless)	    
 	    * **pros:** fully supports [arbitrary user ids from Openshift](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#use-uid_create-images) (best security practice);
 	     * **cons:** the packages required to run the workflows must be installed in [the Dockerfile](https://github.com/arc-on-ocp/actions-runner-controller/blob/master/runner/actions-runner-openshift-rootless.ubuntu-22.04.dockerfile#L18);
  * Created 2 Helm values file for the runner set on Openshift
