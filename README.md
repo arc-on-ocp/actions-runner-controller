@@ -58,6 +58,7 @@ helm install arc \
 We use the [GitHub app auth method](https://docs.github.com/en/enterprise-cloud@latest/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/authenticating-to-the-github-api#authenticating-arc-with-a-github-app) to authenticate ARC runners to GitHub.
 
 ```
+# Once you installed your own app on the org with the above doc:
 $ APP_ID=793817
 $ INSTALL_ID=46003824
 $ GPG_KEY=./gpg.key # the gpg key file is retrieved from GitHub.com and stored locally
