@@ -69,6 +69,9 @@ $ oc create secret generic pre-defined-secret \
    --from-literal=github_app_id=$APP_ID \
    --from-literal=github_app_installation_id=$INSTALL_ID \
    --from-file=github_app_private_key=$GPG_KEY
+
+# Verify the secret
+$ oc extract --to=- secret/pre-defined-secret
 ```
 
 #### Deploy the ARC runner set for OCP (root version)
