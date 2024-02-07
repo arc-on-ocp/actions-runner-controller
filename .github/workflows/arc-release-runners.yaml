@@ -5,12 +5,13 @@ name: Release ARC Runner Images
 on:
   # We must do a trigger on a push: instead of a types: closed so GitHub Secrets
   # are available to the workflow run
-  push:
-    branches:
-      - 'master'
-    paths:
-      - 'runner/VERSION'
-      - '.github/workflows/arc-release-runners.yaml'
+  #push:
+  #  branches:
+  #    - 'master'
+  #  paths:
+  #    - 'runner/VERSION'
+  #    - '.github/workflows/arc-release-runners.yaml'
+  workflow_dispatch:
 
 env:
   # Safeguard to prevent pushing images to registeries after build

@@ -3,16 +3,16 @@ name: Publish ARC Helm Charts
 # Revert to https://github.com/actions-runner-controller/releases#releases
 # for details on why we use this approach
 on:
-  push:
-    branches:
-    - master
-    paths:
-    - 'charts/**'
-    - '.github/workflows/arc-publish-chart.yaml'
-    - '!charts/actions-runner-controller/docs/**'
-    - '!charts/gha-runner-scale-set-controller/**'
-    - '!charts/gha-runner-scale-set/**'
-    - '!**.md'
+  #push:
+  #  branches:
+  #  - master
+  #  paths:
+  #  - 'charts/**'
+  #  - '.github/workflows/arc-publish-chart.yaml'
+  #  - '!charts/actions-runner-controller/docs/**'
+  #  - '!charts/gha-runner-scale-set-controller/**'
+  #  - '!charts/gha-runner-scale-set/**'
+  #  - '!**.md'
   workflow_dispatch:
     inputs:
       force:

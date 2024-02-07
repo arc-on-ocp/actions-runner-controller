@@ -3,9 +3,9 @@
 name: Runner Updates Check (Scheduled Job)
 
 on:
-  schedule:
-    # run daily
-    - cron: "0 9 * * *"
+  #schedule:
+  #  # run daily
+  #  - cron: "0 9 * * *"
   workflow_dispatch:
 
 jobs:

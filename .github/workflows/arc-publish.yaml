@@ -3,9 +3,9 @@ name: Publish ARC Image
 # Revert to https://github.com/actions-runner-controller/releases#releases
 # for details on why we use this approach
 on:
-  release:
-    types:
-      - published
+  #release:
+  #  types:
+  #    - published
   workflow_dispatch:
     inputs:
       release_tag_name:
