@@ -6,12 +6,12 @@ FROM --platform=linux/amd64  mcr.microsoft.com/dotnet/runtime-deps:6.0 as build
 # Replace value with the latest runner release version
 # source: https://github.com/actions/runner/releases
 # ex: 2.303.0
-ARG RUNNER_VERSION=2.312.0
+ARG RUNNER_VERSION=2.321.0
 ARG RUNNER_ARCH="x64"
 # Replace value with the latest runner-container-hooks release version
 # source: https://github.com/actions/runner-container-hooks/releases
 # ex: 0.3.1
-ARG RUNNER_CONTAINER_HOOKS_VERSION=0.5.0
+ARG RUNNER_CONTAINER_HOOKS_VERSION=0.6.2
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUNNER_MANUALLY_TRAP_SIG=1
